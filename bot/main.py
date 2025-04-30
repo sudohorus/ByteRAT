@@ -1,6 +1,7 @@
 # Arquivo que vai conter a inicialização do bot
 # Inicio: 28/04/25
 # Ultima atualização: 28/04/25
+# Arquivo descontinuado, porém está aqui como base
 
 import discord
 from discord.ext import commands
